@@ -1,0 +1,655 @@
+{
+  "metadata": {
+    "version": 1,
+    "disable_limits": false
+  },
+  "nodes": [
+    {
+      "node_id": "eda394ae-991b-4537-afa8-3cea5a012b8d",
+      "type": "SOURCE",
+      "operator": "sagemaker.s3_source_0.1",
+      "parameters": {
+        "dataset_definition": {
+          "__typename": "S3CreateDatasetDefinitionOutput",
+          "datasetSourceType": "S3",
+          "name": "telco_churn_customer_info.csv",
+          "description": null,
+          "s3ExecutionContext": {
+            "__typename": "S3ExecutionContext",
+            "s3Uri": "s3://sagemaker-us-east-1-104877823522/sagemaker-studio-data-prep/data/telco_churn_customer_info.csv",
+            "s3ContentType": "csv",
+            "s3HasHeader": true,
+            "s3FieldDelimiter": ",",
+            "s3DirIncludesNested": false,
+            "s3AddsFilenameColumn": false
+          }
+        }
+      },
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "default",
+          "sampling": {
+            "sampling_method": "sample_by_limit",
+            "limit_rows": 50000
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "ba58be65-e661-40a7-93da-de5db8333fe0",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.infer_and_cast_type_0.1",
+      "parameters": {},
+      "trained_parameters": {
+        "schema": {
+          "CustomerID": "long",
+          "State": "string",
+          "Area Code": "string",
+          "Phone": "string"
+        }
+      },
+      "inputs": [
+        {
+          "name": "default",
+          "node_id": "eda394ae-991b-4537-afa8-3cea5a012b8d",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "0263171c-3717-4e3e-a3ce-78fe61a1ab70",
+      "type": "SOURCE",
+      "operator": "sagemaker.s3_source_0.1",
+      "parameters": {
+        "dataset_definition": {
+          "__typename": "S3CreateDatasetDefinitionOutput",
+          "datasetSourceType": "S3",
+          "name": "telco_churn_account_info.csv",
+          "description": null,
+          "s3ExecutionContext": {
+            "__typename": "S3ExecutionContext",
+            "s3Uri": "s3://sagemaker-us-east-1-104877823522/sagemaker-studio-data-prep/data/telco_churn_account_info.csv",
+            "s3ContentType": "csv",
+            "s3HasHeader": true,
+            "s3FieldDelimiter": ",",
+            "s3DirIncludesNested": false,
+            "s3AddsFilenameColumn": false
+          }
+        }
+      },
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "default",
+          "sampling": {
+            "sampling_method": "sample_by_limit",
+            "limit_rows": 50000
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "39c66d43-3a54-4da2-b394-1744e04cfa83",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.infer_and_cast_type_0.1",
+      "parameters": {},
+      "trained_parameters": {
+        "schema": {
+          "CustomerID": "long",
+          "Account Length": "long",
+          "Int'l Plan": "bool",
+          "VMail Plan": "bool",
+          "Churn?": "string"
+        }
+      },
+      "inputs": [
+        {
+          "name": "default",
+          "node_id": "0263171c-3717-4e3e-a3ce-78fe61a1ab70",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "a8c87fa5-e879-473f-84d0-bb5d46af71cc",
+      "type": "SOURCE",
+      "operator": "sagemaker.athena_source_0.1",
+      "parameters": {
+        "dataset_definition": {
+          "datasetSourceType": "Athena",
+          "name": "telco_churn_utility",
+          "catalogName": "AwsDataCatalog",
+          "databaseName": "telco_db",
+          "queryString": "select * from telco_churn_utility",
+          "s3OutputLocation": "s3://sagemaker-us-east-1-104877823522/athena/",
+          "outputFormat": "parquet",
+          "workgroup": null,
+          "workgroupOutputLocation": null,
+          "enforceWorkgroupConfiguration": false
+        }
+      },
+      "trained_parameters": {
+        "query_execution_id": "f64dab2f-19d9-43f3-8e2d-cd8cb6bb9102",
+        "ctas_table_name": "",
+        "ctas_s3_output_location": "s3://sagemaker-us-east-1-104877823522/athena/a083d2419e1d432ca78e95b8feb4d263/data/"
+      },
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "default",
+          "sampling": {
+            "sampling_method": "sample_by_limit",
+            "limit_rows": 50000
+          }
+        }
+      ]
+    },
+    {
+      "node_id": "0b7166c7-0b46-4018-97f4-7cc584ebc186",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.infer_and_cast_type_0.1",
+      "parameters": {},
+      "trained_parameters": {
+        "schema": {
+          "customerid": "long",
+          "vmail_message": "long",
+          "day_mins": "float",
+          "day_calls": "long",
+          "day_charge": "float",
+          "eve_mins": "float",
+          "eve_calls": "long",
+          "eve_charge": "float",
+          "night_mins": "float",
+          "night_calls": "long",
+          "night_charge": "float",
+          "intl_mins": "float",
+          "intl_calls": "long",
+          "intl_charge": "float",
+          "custserv_calls": "long"
+        }
+      },
+      "inputs": [
+        {
+          "name": "default",
+          "node_id": "a8c87fa5-e879-473f-84d0-bb5d46af71cc",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "a9121a7e-deae-44c9-87fe-49b66f9464a4",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.join_tables_0.1",
+      "parameters": {
+        "left_column": "CustomerID",
+        "right_column": "CustomerID",
+        "join_type": "fullouter"
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "39c66d43-3a54-4da2-b394-1744e04cfa83",
+          "output_name": "default"
+        },
+        {
+          "name": "df",
+          "node_id": "ba58be65-e661-40a7-93da-de5db8333fe0",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "ac58bce3-2034-40fe-b629-4621afc0ee1e",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.join_tables_0.1",
+      "parameters": {
+        "left_column": "CustomerID_0",
+        "right_column": "customerid",
+        "join_type": "fullouter"
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "a9121a7e-deae-44c9-87fe-49b66f9464a4",
+          "output_name": "default"
+        },
+        {
+          "name": "df",
+          "node_id": "0b7166c7-0b46-4018-97f4-7cc584ebc186",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "9290c48e-0aa3-489e-aab2-fa149b2f1f93",
+      "type": "VISUALIZATION",
+      "operator": "sagemaker.visualizations.histogram_0.1",
+      "parameters": {
+        "name": "day_mins_histogram",
+        "x_axis": "day_mins",
+        "facet_by": "Churn?"
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "ac58bce3-2034-40fe-b629-4621afc0ee1e",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "eb6069de-217e-4ed6-9dc3-af1e98161edd",
+      "type": "VISUALIZATION",
+      "operator": "sagemaker.visualizations.quick_model_0.1",
+      "parameters": {
+        "name": "first_quickmodel",
+        "label": "Churn?"
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "ac58bce3-2034-40fe-b629-4621afc0ee1e",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "dd772ab0-0755-486c-ab53-d73b9c45dd53",
+      "type": "VISUALIZATION",
+      "operator": "sagemaker.visualizations.target_leakage_0.1",
+      "parameters": {
+        "name": "churn_target_leakage",
+        "max_features": "25",
+        "problem_type": "classification",
+        "target": "Churn?"
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "ac58bce3-2034-40fe-b629-4621afc0ee1e",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "e219ff5f-fe90-45a7-a16c-3539a71b6a28",
+      "type": "VISUALIZATION",
+      "operator": "sagemaker.visualizations.custom_visualization_0.1",
+      "parameters": {
+        "name": "boxplot_night_charge_by_churn",
+        "code": "# Table is available as variable `df` of pandas dataframe\n# Output Altair chart is available as variable `chart`\nimport altair as alt\n\nchart=alt.Chart(df).mark_boxplot().encode(\n\n    x='Churn?',\n\n    y='night_charge')"
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "ac58bce3-2034-40fe-b629-4621afc0ee1e",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "d286b570-12b3-4984-a8f9-10d8d6279c8e",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.manage_columns_0.1",
+      "parameters": {
+        "operator": "Drop column",
+        "drop_column_parameters": {
+          "column_to_drop": [
+            "CustomerID_0"
+          ]
+        }
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "ac58bce3-2034-40fe-b629-4621afc0ee1e",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "3e1025c9-f071-45fa-9850-cae99f2f414d",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.manage_columns_0.1",
+      "parameters": {
+        "operator": "Drop column",
+        "drop_column_parameters": {
+          "column_to_drop": [
+            "CustomerID_1"
+          ]
+        }
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "d286b570-12b3-4984-a8f9-10d8d6279c8e",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "1de205da-5c28-4d96-a767-e5b66945eac9",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.manage_columns_0.1",
+      "parameters": {
+        "operator": "Drop column",
+        "drop_column_parameters": {
+          "column_to_drop": [
+            "customerid"
+          ]
+        }
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "3e1025c9-f071-45fa-9850-cae99f2f414d",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "79ce7c08-8474-4c01-90bd-4c43715aac05",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.handle_missing_0.1",
+      "parameters": {
+        "operator": "Impute",
+        "impute_parameters": {
+          "column_type": "Numeric",
+          "numeric_parameters": {
+            "strategy": "Approximate Median",
+            "input_column": [
+              "Account Length"
+            ]
+          }
+        }
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "1de205da-5c28-4d96-a767-e5b66945eac9",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "3c8b112e-ecd7-41c1-9f43-db261090b111",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.handle_missing_0.1",
+      "parameters": {
+        "operator": "Impute",
+        "impute_parameters": {
+          "column_type": "Numeric",
+          "numeric_parameters": {
+            "strategy": "Approximate Median",
+            "input_column": [
+              "custserv_calls"
+            ]
+          }
+        }
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "79ce7c08-8474-4c01-90bd-4c43715aac05",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "b51d10d3-393e-4d5d-8d86-9711ea982c25",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.manage_columns_0.1",
+      "parameters": {
+        "operator": "Drop column",
+        "drop_column_parameters": {
+          "column_to_drop": [
+            "Phone"
+          ]
+        }
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "3c8b112e-ecd7-41c1-9f43-db261090b111",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "fee1e294-72ef-49fb-a753-fa9ced56c316",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.encode_categorical_0.1",
+      "parameters": {
+        "operator": "One-hot encode",
+        "one_hot_encode_parameters": {
+          "invalid_handling_strategy": "Keep",
+          "drop_last": false,
+          "output_style": "Columns",
+          "input_column": [
+            "State"
+          ]
+        },
+        "ordinal_encode_parameters": {
+          "invalid_handling_strategy": "Replace with NaN"
+        }
+      },
+      "trained_parameters": {
+        "one_hot_encode_parameters": {
+          "_hash": -1767228197713558300,
+          "string_indexer_model": "P)h>@6aWAK2mqa-iB#sHhfLi7003hF000vJ003=ebYWy+bYU-WVRCdWFfcGMFm;YiPs1<_K=1sFoV%!7Nk?}bmmMaMKwK-+xLdS*;UtJL^}k~k3Be?8mi^w7FJiEelGunq2MG~|BgzzkPSRO9BIH6SpE4PL*m;c~Nc*7Cib`bTFlBI2Y?ke9ry8|f-*v0D60`q;luYnkZe%U%1-MVYsM#w<^YTx!S6$nvZZ)o7K{3KUxIJ+BB8-nEZ-bp3$jIj-cx`d#-@(qU6Jq3bDESA?=wd(cI8{R92*u{dU(xFV5(T<S{QqI!e{(FP8G0a%^n8xU+DQ0T&=2Q(OoN!Fn=epH0|XQR000O8ouP?TxUGUd4gdfE3;+NC7ytkOZDn*}WMOn+FD`Ila&#>)FfcGME@N_IOD;-gU|?Wk@M&N83;<9|0|XQR000O8ouP?TEY1oTGy(tsN&^4@NB{r;WMOn+FK}UUbS*G2FfcGJHZfs2V>mJ~Ej42^Vl6Z{W;QK3WjQe|W-~N3WH&f5F)%r1En_e+FfMa$VQ_GHE^uLTadl;MjgwJN(@+%0PfKrwxF?dkv`J%@MhM_+IydUJ@KOOCjCBjE12o3m(OYcnI%qqEki8f`iy=Pq0rbhQ;>YlG44oPiU(WsC^E>CBbMDRU*!v|4^aG*a=Ze%vDN|XqU`0GQQbfB60AIx_!Da61b59ge_(YJU{T(!|Ei~OtL53|N!wy-L+6`e*viCFQpmDY{)kfGwv1wyui^$SJPsqW}LJp2_ZIcb?5(oB(f-shxUEv-a;92%w7KOPEc>*1zy@_r}?xAoWT=G%sxfszPjjS}1Yw5WwC==0cBH1KY*w{5RF~@!(WXG?eQ--JH9Bg7@6&Ic@oI^`kt2kTPY|U<FTiaAr!$vMSW%1kB$?+RLU{r*4QMntkJ`WQ+j@bnjsSN9qB85Sc-rzet<O3e1e<GS&`URH&@}jD#+VZ?cbLtYv>f!9Ulcd|=-!@dt`}r><|4CY&-<WwLRl|1!nzf!`5!9lh4C51noic3Rn9O0k<8cxUBZZU=(=b6<{VO6l3k?)!Bc2-Z@VznMDf3v$lyAbNo?e`Cy{;!|JUUMGqV5Mg^b)=P@=}l3AVV`VAis(Kna8H?=_u}h(5zMvouK=87^N(T5@!^KdL299<9|3K+^~MgZyZJab_A?79={rcvO68{;UF$dZ=_H%N~TdNtn^1g=oL)A=J}Pf$9=zFt@_?$ziL^QXO*p5sakndE}MSE>U*_SRnzdsAK<lj@E836P)h>@6aWAK2mqa-iB!t&sh|=7000mG002z@003lRbYU+paA9(EEif=JFfc7PF=07lI5IIUHDfbkEi^c0HZ3`2IWa9}Gc+}1H#jjdFga!|V=yo<E^}^SaBz7paA9(Bb!BueV{&6lE=p!#U|?dHv&;EdYt8Zd08mQ-0u%!j000080G*+UROX?FOx*wg0Am3F022TJ00000000000HlEc0001OWprU=VRT_HaA9(EEif=JFfdR{0Rj{Q6aWAK2mqa-iB!0)f<6ua000aC000;O0000000000005+c4gmlFZDn*}WMOn+FD`Ila&#>)FfcGME@N_IP)h*<6ay3h000O8ouP?TEY1oTGy(tsN&^4@NB{r;0000000000q=8Za003lRbYU-WVRCdWFfcGMFfBGQVL4+sGBGVRV>4ncG&p89EjeX5F)d~@G&N*5I59CWIc6<mFfcGKb8ca9aCt6pVRCVGWpq$W0Rj{Q6aWAK2mqa-iB!t&sh|=7000mG002z@0000000000005+c>;nJ*WMOn+FD`Ila&#>)FfcGMEjBS>Ib%37F)cM?Gh!_?IA%62Ib}I9EoL(`HDot9F)=VXW-VhdFfcB2Zeeh6c`k5aa&dKKbS`6ZV^B*41^@s600aO80C)ia0BHmO0000",
+          "one_hot_encoder_model": "P)h>@6aWAK2mqa-iBu~LI408o003zL000vJ003=ebYWy+bYU-WVRCdWFfcGMFqMuyPs1<}hIf93=hjLaLX)fr2_!0*Sgpgpv=RQ&`OH9-|ISeaQU?YW50BsHeea~Khf>t25*;*Tut(G-1HI|s^@PBcP(MYyPka|`a!7l5yjm%q0~Usm)wsF29=f*M?1px`TdA}Ef>h=drMcCOZq^V!;<^#9&Q9P(rRlqV7_9AG^SYIY_z?CW%_nt)=sZ5eckpKsi4sXBRnC=flNV+fLpC;f^EEKX-;W<I)KSWhP*{x<_=1ZNoS=Gs{^!`=mmBk)yI5nYxGYznP)h>@6aWAK2mqa-iBwyEXIc&b000aC000;O003=ebYWy+bYU+paA9(EEif=JFfcA-a$`#_N@ieSU}8|S;L!#EP)h>@6aWAK2mqa-iByZrqd$HD001xo002k;003lRbYU-WVRCdWFfcGMFfB4>Fg7<eGczq@VL3G|G%{p4Enzq|FfCy-Gh#4gVP-ZpIWsL|FfcGKb8ca9aCt6pVRCVGWpsT~O-m~=6is8TE_C4{Lk4D10v3fa%)F`Nw7Afnh=`~=c|6iiqQlF~)Ff4^7W^6hK!1q0wu&N{z~z3NbMLt!XNTu8L4=V`NH91p(h6v^ix8Sy4{d#k;A|XVuuE{kVl>MV?4KO1*^w~+|JmV<ECs=67t{5jaPqn~lZ)a(T4>)wyG`2Eg>?WRcoWeTsbwiEhdk^De$ZJBpxGvB`Pp~!JLv;Vu!p@T@43-g-Ty_aAHY5^W>$IfF!Do6Yje%TNPtNGu9x3QV~e_?%L$Kogy{AUguT@qoZGQ<+|>8HluqQr3Hs7_WNtE&tk0}7<Dp|AQ-##IW&Nv1R*7;}`nCoj=8R9KFh)!uy;$vXo-HaMNdx&|T{%%y_H?W@>nowHoQAA|NDMSUVXzF@hbCw|o&KF7dc07)Q=0Z-#dgf&h{x@%!MM<QJ5s$|b(35wHOMlR@2M<J(>zVmUYvFRBuS*Y=^*cI`#}IN_}W0|4F1X+P)h>@6aWAK2mqa-iBu2=?-3FJ000mG002z@003lRbYU+paA9(EEif=JFfc7LW-vB4H8V3UWMMfqEi^J@IW1v0HZUz=Gc#f^WMO7DH90daV=yo<E^}^SaBz7paA9(Bb!BueV{&6lE=p!#U|?cs`DuFX+&?Qb08mQ-0u%!j000080G*+UR4WWPCer`_0BHdL022TJ00000000000HlEc0001OWprU=VRT_HaA9(EEif=JFfdR{0Rj{Q6aWAK2mqa-iBwyEXIc&b000aC000;O0000000000005+c1OWg5ZDn*}WMOn+FD`Ila&#>)FfcGME@N_IP)h*<6ay3h000O8ouP?Ti_4=wegOagFaiJoNB{r;0000000000q=85Q003lRbYU-WVRCdWFfcGMFfB4>Fg7<eGczq@VL3G|G%{p4Enzq|FfCy-Gh#4gVP-ZpIWsL|FfcGKb8ca9aCt6pVRCVGWpq$W0Rj{Q6aWAK2mqa-iBu2=?-3FJ000mG002z@0000000000005+cECT=lWMOn+FD`Ila&#>)FfcGMEiz^>Ha9ghGc9CcIW;XbGGsX|VK_E0Enzb=VlZT3W;QiBGc98<FfcB2Zeeh6c`k5aa&dKKbS`6ZV^B*41^@s600aO80C)ia0I3520000"
+        }
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "b51d10d3-393e-4d5d-8d86-9711ea982c25",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "bd327271-2935-4a30-baf1-95700aa4326d",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.manage_columns_0.1",
+      "parameters": {
+        "operator": "Drop column",
+        "drop_column_parameters": {
+          "column_to_drop": [
+            "Area Code"
+          ]
+        }
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "fee1e294-72ef-49fb-a753-fa9ced56c316",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "8323029f-c7be-4505-9128-2149bbba9bd2",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.format_string_0.1",
+      "parameters": {
+        "operator": "Remove symbols",
+        "remove_symbols_parameters": {
+          "symbols": ".",
+          "input_column": [
+            "Churn?"
+          ]
+        },
+        "lower_case_parameters": {}
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "bd327271-2935-4a30-baf1-95700aa4326d",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "d1e6f1bd-343c-468b-9621-7d9b0c786836",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.cast_single_data_type_0.1",
+      "parameters": {
+        "column": "Churn?",
+        "original_data_type": "String",
+        "data_type": "bool"
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "8323029f-c7be-4505-9128-2149bbba9bd2",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "4a320e44-a8c0-47ba-ab8e-ba82542ccc34",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.manage_columns_0.1",
+      "parameters": {
+        "operator": "Move column",
+        "move_column_parameters": {
+          "move_type": "Move to start",
+          "move_to_start_parameters": {
+            "column_to_move": "Churn?"
+          }
+        },
+        "drop_column_parameters": {}
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "d1e6f1bd-343c-468b-9621-7d9b0c786836",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "258d97d4-20d3-4a31-8578-5cc7e352e47d",
+      "type": "VISUALIZATION",
+      "operator": "sagemaker.visualizations.quick_model_0.1",
+      "parameters": {
+        "name": "quickmodeltest",
+        "label": "Churn?"
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "4a320e44-a8c0-47ba-ab8e-ba82542ccc34",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    }
+  ]
+}
